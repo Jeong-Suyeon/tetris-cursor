@@ -432,29 +432,50 @@ function renderScore() {
 
 // --- 입력 ---
 
-const KEY_ACTIONS = {
-  ArrowLeft: function () {
+const GAME_ACTIONS = {
+  moveLeft: function () {
     tryMove(-1, 0);
   },
-  ArrowRight: function () {
+  moveRight: function () {
     tryMove(1, 0);
   },
-  ArrowDown: function () {
+  softDrop: function () {
     softDrop();
   },
-  ArrowUp: function () {
+  rotate: function () {
     tryRotate();
   },
-  Space: function () {
+  hardDrop: function () {
     hardDrop();
   },
 };
 
-function handleKeyDown(event) {
-  if (!isGameActive()) {
+const KEY_ACTIONS = {
+  ArrowLeft: GAME_ACTIONS.moveLeft,
+  ArrowRight: GAME_ACTIONS.moveRight,
+  ArrowDown: GAME_ACTIONS.softDrop,
+  ArrowUp: GAME_ACTIONS.rotate,
+  Space: GAME_ACTIONS.hardDrop,
+};
+
+const TOUCH_ACTION_MAP = {
+  left: GAME_ACTIONS.moveLeft,
+  right: GAME_ACTIONS.moveRight,
+  down: GAME_ACTIONS.softDrop,
+  rotate: GAME_ACTIONS.rotate,
+  drop: GAME_ACTIONS.hardDrop,
+};
+
+function performGameAction(actionFn) {
+  if (!isGameActive() || !actionFn) {
     return;
   }
 
+  actionFn();
+  renderGame();
+}
+
+function handleKeyDown(event) {
   const action = KEY_ACTIONS[event.code];
 
   if (!action) {
@@ -462,14 +483,30 @@ function handleKeyDown(event) {
   }
 
   event.preventDefault();
-  action();
-  renderGame();
+  performGameAction(action);
+}
+
+function handleTouchControlClick(event) {
+  const button = event.target.closest("[data-action]");
+
+  if (!button) {
+    return;
+  }
+
+  const action = TOUCH_ACTION_MAP[button.dataset.action];
+  performGameAction(action);
 }
 
 function bindEventListeners() {
   startBtn.addEventListener("click", initGame);
   restartBtn.addEventListener("click", initGame);
   document.addEventListener("keydown", handleKeyDown);
+
+  const touchControlsEl = document.querySelector(".touch-controls");
+
+  if (touchControlsEl) {
+    touchControlsEl.addEventListener("click", handleTouchControlClick);
+  }
 }
 
 bindEventListeners();
