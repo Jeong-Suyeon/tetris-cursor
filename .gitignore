@@ -1,0 +1,11 @@
+# Cursor / 에디터
+.cursor/
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# 에디터 로컬 설정
+.vscode/
+.idea/
