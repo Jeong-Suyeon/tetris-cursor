@@ -1,3 +1,9 @@
+:root {
+  --board-max-width: 290px;
+  --app-padding: 24px;
+  --area-gap: 24px;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -6,16 +12,20 @@
 
 body {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow-x: hidden;
   background: #1a1a2e;
   color: #eee;
   font-family: "Segoe UI", sans-serif;
 }
 
 .app {
-  padding: 24px;
+  width: 100%;
+  max-width: 640px;
+  padding: var(--app-padding);
 }
 
 .header {
@@ -30,12 +40,15 @@ body {
 
 .game-area {
   display: flex;
-  gap: 24px;
+  gap: var(--area-gap);
   align-items: flex-start;
+  justify-content: center;
 }
 
 .board-section {
   position: relative;
+  width: min(var(--board-max-width), 100%);
+  flex-shrink: 0;
 }
 
 .game-over {
@@ -67,8 +80,10 @@ body {
 
 .board {
   display: grid;
-  grid-template-columns: repeat(10, 28px);
-  grid-template-rows: repeat(20, 28px);
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(20, 1fr);
+  width: 100%;
+  aspect-ratio: 10 / 20;
   gap: 1px;
   background: #0f0f1a;
   border: 3px solid #4a4a6a;
@@ -76,8 +91,10 @@ body {
 }
 
 .cell {
-  width: 28px;
-  height: 28px;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
   background: #2a2a3e;
   border: 1px solid #3a3a52;
 }
@@ -99,6 +116,8 @@ body {
   flex-direction: column;
   gap: 16px;
   min-width: 180px;
+  flex: 1;
+  max-width: 280px;
 }
 
 .panel {
@@ -137,6 +156,8 @@ button {
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 button:hover {
@@ -163,4 +184,92 @@ kbd {
   background: #0f0f1a;
   border: 1px solid #4a4a6a;
   border-radius: 4px;
+}
+
+.touch-controls {
+  display: none;
+}
+
+.touch-controls h2 {
+  font-size: 0.9rem;
+  color: #aaa;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.touch-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.touch-pad .touch-btn-wide {
+  grid-column: span 3;
+}
+
+.touch-btn[data-action="rotate"] {
+  grid-column: 2;
+}
+
+.touch-btn {
+  min-height: 48px;
+  padding: 12px;
+  font-size: 1.1rem;
+  background: #0f3460;
+}
+
+.touch-btn:active {
+  background: #1a4f8a;
+}
+
+.help-panel {
+  display: block;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --app-padding: 12px;
+    --area-gap: 16px;
+    --board-max-width: min(
+      290px,
+      calc(100vw - 24px),
+      calc((100dvh - 300px) / 2)
+    );
+  }
+
+  body {
+    align-items: flex-start;
+  }
+
+  .header {
+    margin-bottom: 16px;
+  }
+
+  .header h1 {
+    font-size: 1.5rem;
+  }
+
+  .game-area {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .sidebar {
+    width: 100%;
+    max-width: var(--board-max-width);
+    min-width: 0;
+  }
+
+  .touch-controls {
+    display: block;
+  }
+
+  .help-panel {
+    display: none;
+  }
+
+  .game-over {
+    font-size: 1.25rem;
+  }
 }

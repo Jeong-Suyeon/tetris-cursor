@@ -32,7 +32,18 @@
           <button id="restart-btn" type="button">재시작</button>
         </div>
 
-        <div class="panel">
+        <div class="panel touch-controls" aria-label="터치 조작">
+          <h2>터치 조작</h2>
+          <div class="touch-pad">
+            <button type="button" class="touch-btn" data-action="rotate" aria-label="회전">↻</button>
+            <button type="button" class="touch-btn" data-action="left" aria-label="왼쪽">←</button>
+            <button type="button" class="touch-btn" data-action="down" aria-label="아래">↓</button>
+            <button type="button" class="touch-btn" data-action="right" aria-label="오른쪽">→</button>
+            <button type="button" class="touch-btn touch-btn-wide" data-action="drop" aria-label="즉시 낙하">즉시 낙하</button>
+          </div>
+        </div>
+
+        <div class="panel help-panel">
           <h2>조작법</h2>
           <ul class="help-list">
             <li><kbd>←</kbd> : 왼쪽 이동</li>
